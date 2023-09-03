@@ -5,5 +5,5 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/garages")
-public class GarageController {
+public class ParkingGarageController {
 }

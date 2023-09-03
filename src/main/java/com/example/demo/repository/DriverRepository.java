@@ -1,9 +1,9 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Parking;
+import com.example.demo.data.entity.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GarageRepository extends JpaRepository<Parking, Long> {
+public interface DriverRepository extends JpaRepository<Driver, Long> {
 }

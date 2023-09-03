@@ -1,15 +1,10 @@
-package com.example.demo.entity;
+package com.example.demo.data.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -24,7 +19,6 @@ public class Address {
     private String city;
     private String street;
     private int building;
-    private int apartment;
-    @OneToMany(mappedBy = "address")
-    private List<Parking> parking; //rename
+    @OneToOne(mappedBy = "address")
+    private ParkingGarage parkingGarage;
 }

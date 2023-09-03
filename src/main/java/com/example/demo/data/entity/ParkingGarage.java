@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.data.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,15 +14,18 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Parking {
+public class ParkingGarage {
     @Id
     @GeneratedValue
     private Long id;
+    private String name;
     private int capacity;
     private LocalDate constructionYear;
-    @OneToMany(mappedBy = "parking")
+    @OneToMany(mappedBy = "parkingGarage")
+    private List<ParkingLot> parkingLots;
+    @OneToMany(mappedBy = "parkingGarage")
     private List<Car> cars;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
 }
