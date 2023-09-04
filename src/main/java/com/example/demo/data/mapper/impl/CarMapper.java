@@ -50,10 +50,11 @@ public class CarMapper implements AbstractMapper<Car, CarDto> {
                         "Parking slot \"" + parkingSlotNumber + " in garage \"" + parkingGarageName + " not found.");
             } else throw new NotFoundException("Parking garage \"" + parkingGarageName + "\" not found.");
         }
-
+        //set drivers
         return car;
     }
 
+    //under construction
     @Override
     public CarDto entityToDto(Car car) {
         CarDto carDto = new CarDto();
