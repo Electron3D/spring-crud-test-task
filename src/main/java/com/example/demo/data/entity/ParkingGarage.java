@@ -16,16 +16,13 @@ import java.util.List;
 @Setter
 public class ParkingGarage {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private int capacity;
+    private Integer capacity;
     private LocalDate constructionYear;
     @OneToMany(mappedBy = "parkingGarage")
-    private List<ParkingLot> parkingLots;
-    @OneToMany(mappedBy = "parkingGarage")
-    private List<Car> cars;
-    @OneToOne
-    @JoinColumn(name = "address_id")
+    private List<ParkingSlot> parkingSlots;
+    @Embedded
     private Address address;
 }

@@ -15,12 +15,10 @@ import java.util.Set;
 public class CarDto {
     private String brand;
     private String model;
-    private String vin;
     private String licensePlate;
-    private int power;
-    private LocalDate productionYear;
-    private String parkingGarage;
-    private Integer parkingLot;
+    private LocalDate parkingStarted;
+    private String parkingName;
+    private Integer parkingSlot;
     private Set<String> drivers;
 
     /*public String getCarName() {

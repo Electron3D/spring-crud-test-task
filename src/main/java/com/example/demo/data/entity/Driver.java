@@ -16,11 +16,13 @@ import java.util.Set;
 @Setter
 public class Driver {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
     private LocalDate birthday;
+    private Double parkingDebt;
+    private String phoneNumber;
     private String driverLicense;
     @ManyToMany
     @JoinTable(name = "car_driver",

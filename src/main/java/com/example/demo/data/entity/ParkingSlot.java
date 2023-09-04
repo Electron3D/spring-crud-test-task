@@ -11,11 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ParkingLot {
+public class ParkingSlot {
     @Id
     @GeneratedValue
     private Long id;
-    private int number;
+    private Integer slotNumber;
     private boolean occupied;
     @ManyToOne
     @JoinColumn(name = "parkingGarage_id")

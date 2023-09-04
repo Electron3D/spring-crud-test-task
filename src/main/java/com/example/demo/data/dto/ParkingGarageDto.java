@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -16,6 +16,6 @@ public class ParkingGarageDto {
     private String name;
     private int capacity;
     private LocalDate constructionYear;
-    private List<String> cars;
+    private Map<Integer, Boolean> parkingSlots;
     private String address;
 }

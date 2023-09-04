@@ -16,22 +16,20 @@ import java.util.Set;
 @Setter
 public class Car {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String brand;
     private String model;
-    private String vin;
     private String licensePlate;
-    private int power;
-    private LocalDate productionYear;
-    @ManyToOne
-    @JoinColumn(name = "parkingGarage_id")
-    private ParkingGarage parkingGarage;
+    private LocalDate parkingStarted;
     @OneToOne(mappedBy = "car")
-    private ParkingLot parkingLot;
+    private ParkingSlot parkingSlot;
     @ManyToMany
     @JoinTable(name = "car_driver",
             joinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "driver_id", referencedColumnName = "id"))
     private Set<Driver> drivers;
 }
+
+
+
