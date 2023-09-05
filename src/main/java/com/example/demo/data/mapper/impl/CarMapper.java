@@ -7,7 +7,9 @@ import com.example.demo.data.entity.ParkingGarage;
 import com.example.demo.data.entity.ParkingSlot;
 import com.example.demo.data.mapper.AbstractMapper;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.NotProvidedException;
 import com.example.demo.exception.SlotOccupiedException;
+import com.example.demo.repository.DriverRepository;
 import com.example.demo.repository.ParkingGarageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,9 +22,11 @@ import java.util.stream.Collectors;
 @Component
 public class CarMapper implements AbstractMapper<Car, CarDto> {
     private final ParkingGarageRepository parkingGarageRepository;
+    private final DriverRepository driverRepository;
     @Autowired
-    public CarMapper(ParkingGarageRepository parkingGarageRepository) {
+    public CarMapper(ParkingGarageRepository parkingGarageRepository, DriverRepository driverRepository) {
         this.parkingGarageRepository = parkingGarageRepository;
+        this.driverRepository = driverRepository;
     }
 
     @Override
@@ -49,32 +53,42 @@ public class CarMapper implements AbstractMapper<Car, CarDto> {
                 } else throw new NotFoundException(
                         "Parking slot \"" + parkingSlotNumber + " in garage \"" + parkingGarageName + " not found.");
             } else throw new NotFoundException("Parking garage \"" + parkingGarageName + "\" not found.");
-        }
-        //set drivers
+        } else throw new NotProvidedException("Please provide parking garage name.");
+
+        Set<String> driversLicenses = carDto.getDrivers();
+        if (driversLicenses != null) {
+            Set<Driver> drivers = driversLicenses.stream()
+                    .map(driverLicense -> driverRepository
+                            .findByDriverLicense(driverLicense)
+                            .orElseThrow(() -> new NotFoundException(
+                                    "Driver with driver license " + driverLicense + " not found.")))
+                    .collect(Collectors.toSet());
+            car.setDrivers(drivers);
+        } else throw new NotProvidedException("Please provide information about drivers.");
         return car;
     }
 
-    //under construction
     @Override
     public CarDto entityToDto(Car car) {
         CarDto carDto = new CarDto();
         carDto.setBrand(car.getBrand());
         carDto.setModel(car.getModel());
         carDto.setLicensePlate(car.getLicensePlate());
+        carDto.setParkingStarted(car.getParkingStarted());
+
+        ParkingSlot parkingSlot = car.getParkingSlot();
+        if (parkingSlot != null) {
+            carDto.setParkingName(parkingSlot.getParkingGarage().getName());
+            carDto.setParkingSlot(parkingSlot.getSlotNumber());
+        }
 
         Set<Driver> drivers = car.getDrivers();
         if (drivers != null) {
             carDto.setDrivers(drivers
                     .stream()
-                    .map(this::getDriverFullName)
+                    .map(Driver::getDriverLicense)
                     .collect(Collectors.toSet()));
         }
         return carDto;
-    }
-
-    public String getDriverFullName(Driver driver) {
-        return driver.getFirstName() + " "
-                + driver.getLastName() + ", DL: "
-                + driver.getDriverLicense();
     }
 }

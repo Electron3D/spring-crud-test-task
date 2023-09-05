@@ -20,10 +20,10 @@ public class Driver {
     private Long id;
     private String firstName;
     private String lastName;
+    private String driverLicense;
     private LocalDate birthday;
     private Double parkingDebt;
     private String phoneNumber;
-    private String driverLicense;
     @ManyToMany
     @JoinTable(name = "car_driver",
             joinColumns = @JoinColumn(name = "driver_id", referencedColumnName = "id"),

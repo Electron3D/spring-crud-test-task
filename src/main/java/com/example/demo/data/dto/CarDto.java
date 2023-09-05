@@ -20,8 +20,4 @@ public class CarDto {
     private String parkingName;
     private Integer parkingSlot;
     private Set<String> drivers;
-
-    /*public String getCarName() {
-        return brand + " " + model + ", LP: " + licensePlate;
-    }*/
 }
