@@ -2,9 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.data.dto.CarDto;
 
+import java.util.List;
+
 public interface CarService {
     void create(CarDto carDto);
     CarDto findById(Long id);
-    void update(CarDto carDto);
+    List<CarDto> findAll();
+    CarDto updateById(Long id, CarDto carDto);
     void deleteById(Long id);
 }

@@ -6,9 +6,9 @@ import com.example.demo.data.mapper.AbstractMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ParkingGarageMapper implements AbstractMapper<ParkingGarage, ParkingGarageDto> {
+public class ParkingGarageMapper extends AbstractMapper<ParkingGarage, ParkingGarageDto> {
     @Override
-    public ParkingGarage dtoToEntity(ParkingGarageDto dto) {
+    public ParkingGarage dtoToEntity(ParkingGarageDto dto, ParkingGarage existingGarage) {
         return null;
     }
 

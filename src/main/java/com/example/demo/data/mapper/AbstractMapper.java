@@ -1,6 +1,6 @@
 package com.example.demo.data.mapper;
 
-public interface AbstractMapper<E, D> {
-    E dtoToEntity(D dto);
-    D entityToDto(E entity);
+public abstract class AbstractMapper<E, D> {
+    public abstract E dtoToEntity(D dto, E existingEntity);
+    public abstract D entityToDto(E entity);
 }

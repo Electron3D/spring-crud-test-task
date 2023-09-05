@@ -6,6 +6,8 @@ import com.example.demo.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
@@ -25,8 +27,13 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public void update(DriverDto driverDto) {
+    public List<DriverDto> findAll() {
+        return null;
+    }
 
+    @Override
+    public DriverDto updateById(Long id, DriverDto driverDto) {
+        return null;
     }
 
     @Override

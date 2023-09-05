@@ -8,11 +8,12 @@ import com.example.demo.data.entity.ParkingSlot;
 import com.example.demo.data.mapper.AbstractMapper;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.exception.NotProvidedException;
-import com.example.demo.exception.SlotOccupiedException;
+import com.example.demo.exception.OccupiedException;
 import com.example.demo.repository.DriverRepository;
 import com.example.demo.repository.ParkingGarageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class CarMapper implements AbstractMapper<Car, CarDto> {
+public class CarMapper extends AbstractMapper<Car, CarDto> {
     private final ParkingGarageRepository parkingGarageRepository;
     private final DriverRepository driverRepository;
     @Autowired
@@ -30,12 +31,12 @@ public class CarMapper implements AbstractMapper<Car, CarDto> {
     }
 
     @Override
-    public Car dtoToEntity(CarDto carDto) {
-        Car car = new Car();
-        car.setBrand(carDto.getBrand());
-        car.setModel(carDto.getModel());
-        car.setLicensePlate(carDto.getLicensePlate());
-        car.setParkingStarted(carDto.getParkingStarted());
+    @Transactional
+    public Car dtoToEntity(CarDto carDto, Car existingCar) {
+        existingCar.setBrand(carDto.getBrand());
+        existingCar.setModel(carDto.getModel());
+        existingCar.setLicensePlate(carDto.getLicensePlate());
+        existingCar.setParkingStarted(carDto.getParkingStarted());
 
         Integer parkingSlotNumber = carDto.getParkingSlot();
         String parkingGarageName = carDto.getParkingName();
@@ -47,9 +48,9 @@ public class CarMapper implements AbstractMapper<Car, CarDto> {
                 if (parkingSlots.size() > parkingSlotNumber) {
                     ParkingSlot parkingSlot = parkingSlots.get(parkingSlotNumber);
                     if (parkingSlot.isOccupied()) {
-                        throw new SlotOccupiedException("Parking slot " + parkingSlotNumber + " is occupied.");
+                        throw new OccupiedException("Parking slot " + parkingSlotNumber + " is already occupied.");
                     }
-                    car.setParkingSlot(parkingSlot);
+                    existingCar.setParkingSlot(parkingSlot);
                 } else throw new NotFoundException(
                         "Parking slot \"" + parkingSlotNumber + " in garage \"" + parkingGarageName + " not found.");
             } else throw new NotFoundException("Parking garage \"" + parkingGarageName + "\" not found.");
@@ -63,12 +64,13 @@ public class CarMapper implements AbstractMapper<Car, CarDto> {
                             .orElseThrow(() -> new NotFoundException(
                                     "Driver with driver license " + driverLicense + " not found.")))
                     .collect(Collectors.toSet());
-            car.setDrivers(drivers);
+            existingCar.setDrivers(drivers);
         } else throw new NotProvidedException("Please provide information about drivers.");
-        return car;
+        return existingCar;
     }
 
     @Override
+    @Transactional
     public CarDto entityToDto(Car car) {
         CarDto carDto = new CarDto();
         carDto.setBrand(car.getBrand());

@@ -8,8 +8,11 @@ import com.example.demo.repository.CarRepository;
 import com.example.demo.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -23,26 +26,42 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Transactional
     public void create(CarDto carDto) {
-        carRepository.save(carMapper.dtoToEntity(carDto));
+        carRepository.save(carMapper.dtoToEntity(carDto, new Car()));
     }
 
     @Override
     public CarDto findById(Long id) {
         return carMapper.entityToDto(carRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("Car with id " + id + " not found.")));
+                .orElseThrow(() -> new NotFoundException("Car with ID \"" + id + "\" not found.")));
     }
 
     @Override
-    public void update(CarDto carDto) {
-        Car car = carMapper.dtoToEntity(carDto);
-        /*carRepository
-                .findByLicensePlate(car.getLicensePlate())
-                .ifPresentOrElse(() -> carRepository.save(car), new NotFoundException(""));*/
+    public List<CarDto> findAll() {
+        return carRepository
+                .findAll()
+                .stream()
+                .map(carMapper::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public CarDto updateById(Long id, CarDto carDto) {
+        Optional<Car> carOptional = carRepository.findById(id);
+        if (carOptional.isPresent()) {
+            Car updatedCar = carMapper.dtoToEntity(carDto, carOptional.get());
+            return carMapper.entityToDto(updatedCar);
+        } else throw new NotFoundException("Car with ID \"" + id + "\" not found.");
     }
 
     @Override
     public void deleteById(Long id) {
-
+        if (carRepository.existsById(id)) {
+            carRepository.deleteById(id);
+        } else {
+            throw new NotFoundException("Car with ID \"" + id + "\" not found");
+        }
     }
 }

@@ -6,6 +6,8 @@ import com.example.demo.service.ParkingGarageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ParkingGarageServiceImpl implements ParkingGarageService {
     private final ParkingGarageRepository parkingGarageRepository;
@@ -25,8 +27,13 @@ public class ParkingGarageServiceImpl implements ParkingGarageService {
     }
 
     @Override
-    public void update(ParkingGarageDto parkingGarageDto) {
+    public List<ParkingGarageDto> findAll() {
+        return null;
+    }
 
+    @Override
+    public ParkingGarageDto updateById(Long id, ParkingGarageDto parkingGarageDto) {
+        return null;
     }
 
     @Override

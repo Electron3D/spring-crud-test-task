@@ -6,9 +6,9 @@ import com.example.demo.data.mapper.AbstractMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DriverMapper implements AbstractMapper<Driver, DriverDto> {
+public class DriverMapper extends AbstractMapper<Driver, DriverDto> {
     @Override
-    public Driver dtoToEntity(DriverDto dto) {
+    public Driver dtoToEntity(DriverDto dto, Driver existingDriver) {
         return null;
     }
 
