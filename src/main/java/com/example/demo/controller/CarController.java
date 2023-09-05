@@ -4,7 +4,6 @@ import com.example.demo.data.RestResponse;
 import com.example.demo.data.dto.CarDto;
 import com.example.demo.service.CarService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

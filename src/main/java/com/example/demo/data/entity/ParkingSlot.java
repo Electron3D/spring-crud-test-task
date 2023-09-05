@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class ParkingSlot {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer slotNumber;
     private boolean occupied;
