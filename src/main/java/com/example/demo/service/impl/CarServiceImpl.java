@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,13 +30,15 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional
     public void create(CarDto carDto) {
+        carDto.setParkingStarted(LocalDateTime.now());
         carRepository.save(carMapper.dtoToEntity(carDto, new Car()));
     }
 
     @Override
     public CarDto findById(Long id) {
-        return carMapper.entityToDto(carRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Car with ID \"" + id + "\" not found.")));
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Car with ID \"" + id + "\" not found."));
+        return carMapper.entityToDto(car);
     }
 
     @Override
@@ -51,7 +55,9 @@ public class CarServiceImpl implements CarService {
     public CarDto updateById(Long id, CarDto carDto) {
         Optional<Car> carOptional = carRepository.findById(id);
         if (carOptional.isPresent()) {
-            Car updatedCar = carMapper.dtoToEntity(carDto, carOptional.get());
+            Car existedCar = carOptional.get();
+
+            Car updatedCar = carMapper.dtoToEntity(carDto, existedCar);
             return carMapper.entityToDto(updatedCar);
         } else throw new NotFoundException("Car with ID \"" + id + "\" not found.");
     }

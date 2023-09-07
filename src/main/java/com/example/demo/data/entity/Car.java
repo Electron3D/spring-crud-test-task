@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -21,7 +21,7 @@ public class Car {
     private String brand;
     private String model;
     private String licensePlate;
-    private LocalDate parkingStarted;
+    private LocalDateTime parkingStarted;
     @OneToOne(mappedBy = "car")
     private ParkingSlot parkingSlot;
     @ManyToMany

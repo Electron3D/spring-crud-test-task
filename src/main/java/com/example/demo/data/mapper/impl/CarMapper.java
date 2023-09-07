@@ -35,8 +35,11 @@ public class CarMapper extends AbstractMapper<Car, CarDto> {
     public Car dtoToEntity(CarDto carDto, Car existingCar) {
         existingCar.setBrand(carDto.getBrand());
         existingCar.setModel(carDto.getModel());
+        //add licensePlate check (maybe not here)
         existingCar.setLicensePlate(carDto.getLicensePlate());
-        existingCar.setParkingStarted(carDto.getParkingStarted());
+        if (existingCar.getParkingStarted() == null) {
+            existingCar.setParkingStarted(carDto.getParkingStarted());
+        }
 
         Integer parkingSlotNumber = carDto.getParkingSlot();
         String parkingGarageName = carDto.getParkingName();
@@ -45,14 +48,15 @@ public class CarMapper extends AbstractMapper<Car, CarDto> {
             if (parkingGarage.isPresent()) {
                 ParkingGarage garage = parkingGarage.get();
                 List<ParkingSlot> parkingSlots = garage.getParkingSlots();
-                if (parkingSlots.size() > parkingSlotNumber) {
-                    ParkingSlot parkingSlot = parkingSlots.get(parkingSlotNumber);
+                if (parkingSlots.size() >= parkingSlotNumber) {
+                    ParkingSlot parkingSlot = parkingSlots.get(parkingSlotNumber - 1);
                     if (parkingSlot.isOccupied()) {
                         throw new OccupiedException("Parking slot " + parkingSlotNumber + " is already occupied.");
                     }
+                    parkingSlot.setOccupied(true);
                     existingCar.setParkingSlot(parkingSlot);
                 } else throw new NotFoundException(
-                        "Parking slot \"" + parkingSlotNumber + " in garage \"" + parkingGarageName + " not found.");
+                        "Parking slot \"" + parkingSlotNumber + "\" in garage \"" + parkingGarageName + "\" not found.");
             } else throw new NotFoundException("Parking garage \"" + parkingGarageName + "\" not found.");
         } else throw new NotProvidedException("Please provide parking garage name.");
 

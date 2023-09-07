@@ -1,12 +1,13 @@
 package com.example.demo.data.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -18,11 +19,11 @@ public class CarDto {
     private String model;
     @NotBlank
     private String licensePlate;
-    private LocalDate parkingStarted;
+    private LocalDateTime parkingStarted;
     @NotBlank
     private String parkingName;
-    @NotBlank
+    @NotNull
     private Integer parkingSlot;
-    @NotBlank
+    @NotNull
     private Set<String> drivers;
 }

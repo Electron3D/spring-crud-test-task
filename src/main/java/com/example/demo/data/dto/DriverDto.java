@@ -16,6 +16,7 @@ import java.util.Set;
 public class DriverDto {
     @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
     @NotBlank
     private String driverLicense;
