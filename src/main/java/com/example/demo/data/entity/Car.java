@@ -22,7 +22,8 @@ public class Car {
     private String model;
     private String licensePlate;
     private LocalDateTime parkingStarted;
-    @OneToOne(mappedBy = "car")
+    @OneToOne
+    @JoinColumn(name = "parkingSlot_id")
     private ParkingSlot parkingSlot;
     @ManyToMany
     @JoinTable(name = "car_driver",

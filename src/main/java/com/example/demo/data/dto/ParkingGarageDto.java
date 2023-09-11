@@ -17,8 +17,9 @@ public class ParkingGarageDto {
     @NotBlank
     private String name;
     @NotBlank
-    private int capacity;
+    private Integer capacity;
     private LocalDate constructionYear;
+    private Integer parkingRate;
     private Map<Integer, Boolean> parkingSlots;
     @NotBlank
     private String address;

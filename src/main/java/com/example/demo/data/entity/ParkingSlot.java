@@ -20,7 +20,6 @@ public class ParkingSlot {
     @ManyToOne
     @JoinColumn(name = "parkingGarage_id")
     private ParkingGarage parkingGarage;
-    @OneToOne
-    @JoinColumn(name = "car_id")
+    @OneToOne(mappedBy = "parkingSlot")
     private Car car;
 }

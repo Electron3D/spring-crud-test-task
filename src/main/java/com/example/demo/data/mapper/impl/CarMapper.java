@@ -8,7 +8,7 @@ import com.example.demo.data.entity.ParkingSlot;
 import com.example.demo.data.mapper.AbstractMapper;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.exception.NotProvidedException;
-import com.example.demo.exception.OccupiedException;
+import com.example.demo.exception.WrongInputException;
 import com.example.demo.repository.DriverRepository;
 import com.example.demo.repository.ParkingGarageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,30 +35,33 @@ public class CarMapper extends AbstractMapper<Car, CarDto> {
     public Car dtoToEntity(CarDto carDto, Car existingCar) {
         existingCar.setBrand(carDto.getBrand());
         existingCar.setModel(carDto.getModel());
-        //add licensePlate check (maybe not here)
-        existingCar.setLicensePlate(carDto.getLicensePlate());
+        if (existingCar.getLicensePlate() == null) {
+            existingCar.setLicensePlate(carDto.getLicensePlate());
+        }
         if (existingCar.getParkingStarted() == null) {
             existingCar.setParkingStarted(carDto.getParkingStarted());
         }
-
-        Integer parkingSlotNumber = carDto.getParkingSlot();
-        String parkingGarageName = carDto.getParkingName();
-        if (parkingGarageName != null) {
-            Optional<ParkingGarage> parkingGarage = parkingGarageRepository.findByName(parkingGarageName);
-            if (parkingGarage.isPresent()) {
-                ParkingGarage garage = parkingGarage.get();
-                List<ParkingSlot> parkingSlots = garage.getParkingSlots();
-                if (parkingSlots.size() >= parkingSlotNumber) {
-                    ParkingSlot parkingSlot = parkingSlots.get(parkingSlotNumber - 1);
-                    if (parkingSlot.isOccupied()) {
-                        throw new OccupiedException("Parking slot " + parkingSlotNumber + " is already occupied.");
-                    }
-                    parkingSlot.setOccupied(true);
-                    existingCar.setParkingSlot(parkingSlot);
-                } else throw new NotFoundException(
-                        "Parking slot \"" + parkingSlotNumber + "\" in garage \"" + parkingGarageName + "\" not found.");
-            } else throw new NotFoundException("Parking garage \"" + parkingGarageName + "\" not found.");
-        } else throw new NotProvidedException("Please provide parking garage name.");
+        if (existingCar.getParkingSlot() == null) {
+            Integer parkingSlotNumber = carDto.getParkingSlot();
+            String parkingGarageName = carDto.getParkingName();
+            if (parkingGarageName != null) {
+                Optional<ParkingGarage> parkingGarage = parkingGarageRepository.findByName(parkingGarageName);
+                if (parkingGarage.isPresent()) {
+                    ParkingGarage garage = parkingGarage.get();
+                    List<ParkingSlot> parkingSlots = garage.getParkingSlots();
+                    if (parkingSlots.size() >= parkingSlotNumber) {
+                        ParkingSlot parkingSlot = parkingSlots.get(parkingSlotNumber - 1);
+                        if (parkingSlot.isOccupied()) {
+                            throw new WrongInputException("Parking slot " + parkingSlotNumber + " is already occupied.");
+                        }
+                        parkingSlot.setOccupied(true);
+                        existingCar.setParkingSlot(parkingSlot);
+                    } else throw new NotFoundException(
+                            "Parking slot \"" + parkingSlotNumber
+                                    + "\" in garage \"" + parkingGarageName + "\" not found.");
+                } else throw new NotFoundException("Parking garage \"" + parkingGarageName + "\" not found.");
+            } else throw new NotProvidedException("Please provide parking garage name.");
+        } else throw new WrongInputException("You can't change your parking slot.");
 
         Set<String> driversLicenses = carDto.getDrivers();
         if (driversLicenses != null) {

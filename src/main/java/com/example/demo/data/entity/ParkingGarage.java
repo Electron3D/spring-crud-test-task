@@ -21,6 +21,7 @@ public class ParkingGarage {
     private String name;
     private Integer capacity;
     private LocalDate constructionYear;
+    private Integer parkingRate;
     @OneToMany(mappedBy = "parkingGarage")
     private List<ParkingSlot> parkingSlots;
     @Embedded

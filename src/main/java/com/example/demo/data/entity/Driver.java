@@ -22,7 +22,6 @@ public class Driver {
     private String lastName;
     private String driverLicense;
     private LocalDate birthday;
-    private Double parkingDebt;
     private String phoneNumber;
     @ManyToMany
     @JoinTable(name = "car_driver",

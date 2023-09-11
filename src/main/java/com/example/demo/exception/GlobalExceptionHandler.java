@@ -14,10 +14,10 @@ public class GlobalExceptionHandler {
         String errorMessage = "Resource not provided: " + ex.getMessage();
         return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    @ExceptionHandler(OccupiedException.class)
-    public ResponseEntity<Object> handleOccupiedException(
+    @ExceptionHandler(WrongInputException.class)
+    public ResponseEntity<Object> handleWrongInputException(
             Exception ex, WebRequest request) {
-        String errorMessage = "Can't occupy resource: " + ex.getMessage();
+        String errorMessage = "Wrong input: " + ex.getMessage();
         return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @ExceptionHandler(NotFoundException.class)
