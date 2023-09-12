@@ -22,5 +22,13 @@ public class ParkingGarageDto {
     private Integer parkingRate;
     private Map<Integer, Boolean> parkingSlots;
     @NotBlank
-    private String address;
+    private String country;
+    @NotBlank
+    private String state;
+    @NotBlank
+    private String city;
+    @NotBlank
+    private String street;
+    @NotBlank
+    private String building;
 }
