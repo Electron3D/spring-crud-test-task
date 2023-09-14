@@ -1,13 +1,13 @@
 package com.example.demo.service;
 
-import com.example.demo.data.dto.DriverDto;
+import com.example.demo.data.entity.Driver;
 
 import java.util.List;
 
 public interface DriverService {
-    void create(DriverDto driverDto);
-    DriverDto findById(Long id);
-    List<DriverDto> findAll();
-    DriverDto updateById(Long id, DriverDto driverDto);
+    void create(Driver driver);
+    Driver findById(Long id);
+    List<Driver> findAll();
+    void updateById(Long id, Driver driver);
     void deleteById(Long id);
 }

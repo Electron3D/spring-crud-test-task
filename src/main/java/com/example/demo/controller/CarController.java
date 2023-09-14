@@ -2,39 +2,44 @@ package com.example.demo.controller;
 
 import com.example.demo.data.RestResponse;
 import com.example.demo.data.dto.CarDto;
+import com.example.demo.data.entity.Car;
+import com.example.demo.data.mapper.impl.CarMapper;
 import com.example.demo.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cars")
 @RequiredArgsConstructor
 public class CarController {
     private final CarService carService;
+    private final CarMapper carMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestResponse createCar(@RequestBody CarDto carDto) {
-        carService.create(carDto);
+        carService.create(carMapper.dtoToEntity(carDto));
         return new RestResponse("Car created");
     }
 
     @GetMapping("/{id}")
     public CarDto getCarById(@PathVariable Long id) {
-        return carService.findById(id);
+        return carMapper.entityToDto(carService.findById(id));
     }
 
     @GetMapping
     public List<CarDto> getAllCars() {
-        return carService.findAll();
+        List<Car> allCars = carService.findAll();
+        return allCars.stream().map(carMapper::entityToDto).collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
     public RestResponse updateCarById(@PathVariable Long id, @RequestBody CarDto carDto) {
-        carService.updateById(id, carDto);
+        carService.updateById(id, carMapper.dtoToEntity(carDto));
         return new RestResponse("Car with id: " + id + " updated.");
     }
 

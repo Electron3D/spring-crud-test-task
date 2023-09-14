@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Service
 public class ParkingGarageServiceImpl implements ParkingGarageService {
     private final ParkingGarageRepository parkingGarageRepository;
-    private final ParkingGarageMapper parkingGarageMapper;
 
     @Autowired
     public ParkingGarageServiceImpl(ParkingGarageRepository parkingGarageRepository, ParkingGarageMapper parkingGarageMapper) {

@@ -26,12 +26,13 @@ public class DriverMapper extends AbstractMapper<Driver, DriverDto> {
 
     @Override
     @Transactional
-    public Driver dtoToEntity(DriverDto dto, Driver existingDriver) {
-        existingDriver.setFirstName(dto.getFirstName());
-        existingDriver.setLastName(dto.getLastName());
-        existingDriver.setDriverLicense(dto.getDriverLicense());
-        existingDriver.setBirthday(dto.getBirthday());
-        existingDriver.setPhoneNumber(dto.getPhoneNumber());
+    public Driver dtoToEntity(DriverDto dto) {
+        Driver driver = new Driver();
+        driver.setFirstName(dto.getFirstName());
+        driver.setLastName(dto.getLastName());
+        driver.setDriverLicense(dto.getDriverLicense());
+        driver.setBirthday(dto.getBirthday());
+        driver.setPhoneNumber(dto.getPhoneNumber());
         Set<String> carsLicensePlates = dto.getCars();
         if (carsLicensePlates != null) {
             Set<Car> cars = carsLicensePlates.stream()
@@ -40,9 +41,9 @@ public class DriverMapper extends AbstractMapper<Driver, DriverDto> {
                             .orElseThrow(() -> new NotFoundException(
                                     "Car with license plate " + licensePlate + " not found.")))
                     .collect(Collectors.toSet());
-            existingDriver.setCars(cars);
+            driver.setCars(cars);
         }
-        return existingDriver;
+        return driver;
     }
 
     @Override

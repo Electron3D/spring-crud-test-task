@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.data.RestResponse;
 import com.example.demo.data.dto.CarDto;
 import com.example.demo.data.dto.ParkingGarageDto;
+import com.example.demo.data.mapper.impl.ParkingGarageMapper;
 import com.example.demo.service.ParkingGarageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,17 +16,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParkingGarageController {
     private final ParkingGarageService parkingGarageService;
+    private final ParkingGarageMapper parkingGarageMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestResponse createParkingGarage(@RequestBody ParkingGarageDto parkingGarageDto) {
-        parkingGarageService.create(parkingGarageDto);
+        parkingGarageService.create(parkingGarageMapper.dtoToEntity(parkingGarageDto));
         return new RestResponse("Parking garage created");
     }
 
     @GetMapping("/{id}")
     public ParkingGarageDto getParkingGarageById(@PathVariable Long id) {
-        return parkingGarageService.findById(id);
+        return parkingGarageMapper.entityToDto(parkingGarageService.findById(id));
     }
 
     @GetMapping

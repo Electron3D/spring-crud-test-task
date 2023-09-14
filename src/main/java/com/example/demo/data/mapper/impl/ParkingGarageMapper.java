@@ -18,13 +18,14 @@ import java.util.stream.Collectors;
 public class ParkingGarageMapper extends AbstractMapper<ParkingGarage, ParkingGarageDto> {
     @Override
     @Transactional
-    public ParkingGarage dtoToEntity(ParkingGarageDto garageDto, ParkingGarage existingGarage) {
-        existingGarage.setName(garageDto.getName());
+    public ParkingGarage dtoToEntity(ParkingGarageDto garageDto) {
+        ParkingGarage parkingGarage = new ParkingGarage();
+        parkingGarage.setName(garageDto.getName());
         int capacity = garageDto.getCapacity();
-        existingGarage.setCapacity(capacity);
-        existingGarage.setConstructionYear((garageDto.getConstructionYear()));
-        existingGarage.setParkingRate(Objects.requireNonNullElse(garageDto.getParkingRate(), 0));
-        List<ParkingSlot> parkingSlots = existingGarage.getParkingSlots();
+        parkingGarage.setCapacity(capacity);
+        parkingGarage.setConstructionYear((garageDto.getConstructionYear()));
+        parkingGarage.setParkingRate(Objects.requireNonNullElse(garageDto.getParkingRate(), 0));
+        List<ParkingSlot> parkingSlots = parkingGarage.getParkingSlots();
         if (parkingSlots == null) {
             parkingSlots = new ArrayList<>();
             for (int i = 0; i < capacity; i++) {
@@ -33,7 +34,7 @@ public class ParkingGarageMapper extends AbstractMapper<ParkingGarage, ParkingGa
                 parkingSlots.add(parkingSlot);
             }
         }
-        if (existingGarage.getAddress() == null) {
+        if (parkingGarage.getAddress() == null) {
             Address address = new Address(
                     garageDto.getCountry(),
                     garageDto.getState(),
@@ -41,9 +42,9 @@ public class ParkingGarageMapper extends AbstractMapper<ParkingGarage, ParkingGa
                     garageDto.getStreet(),
                     garageDto.getBuilding()
             );
-            existingGarage.setAddress(address);
+            parkingGarage.setAddress(address);
         }
-        return existingGarage;
+        return parkingGarage;
     }
 
     @Override

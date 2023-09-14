@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,43 +22,38 @@ import java.util.stream.Collectors;
 public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
     private final CarRepository carRepository;
-    private final DriverMapper driverMapper;
 
     @Autowired
-    public DriverServiceImpl(DriverRepository driverRepository, CarRepository carRepository, DriverMapper driverMapper) {
+    public DriverServiceImpl(DriverRepository driverRepository, CarRepository carRepository) {
         this.driverRepository = driverRepository;
         this.carRepository = carRepository;
-        this.driverMapper = driverMapper;
     }
     @Override
     @Transactional
-    public void create(DriverDto driverDto) {
-        driverRepository.save(driverMapper.dtoToEntity(driverDto, new Driver()));
+    public void create(Driver driver) {
+        driverRepository.save(driver);
     }
 
     @Override
-    public DriverDto findById(Long id) {
-        Driver driver = driverRepository.findById(id)
+    @Transactional(readOnly = true)
+    public Driver findById(Long id) {
+        return driverRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Driver with ID \"" + id + "\" not found."));
-        return driverMapper.entityToDto(driver);
     }
 
     @Override
-    public List<DriverDto> findAll() {
-        return driverRepository
-                .findAll()
-                .stream()
-                .map(driverMapper::entityToDto)
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public List<Driver> findAll() {
+        return new ArrayList<>(driverRepository.findAll());
     }
 
+    //redo
     @Override
-    public DriverDto updateById(Long id, DriverDto driverDto) {
+    @Transactional
+    public void updateById(Long id, Driver driver) {
         Optional<Driver> driverOptional = driverRepository.findById(id);
         if (driverOptional.isPresent()) {
             Driver existedDriver = driverOptional.get();
-            Driver updatedDriver = driverMapper.dtoToEntity(driverDto, existedDriver);
-            return driverMapper.entityToDto(updatedDriver);
         } else throw new NotFoundException("Driver with ID \"" + id + "\" not found.");
     }
 
