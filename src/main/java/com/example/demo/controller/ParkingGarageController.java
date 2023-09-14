@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.data.RestResponse;
-import com.example.demo.data.dto.CarDto;
 import com.example.demo.data.dto.ParkingGarageDto;
 import com.example.demo.data.entity.ParkingGarage;
 import com.example.demo.data.mapper.impl.ParkingGarageMapper;
