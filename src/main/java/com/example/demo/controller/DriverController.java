@@ -40,12 +40,12 @@ public class DriverController {
     @PutMapping("/{id}")
     public RestResponse updateDriverById(@PathVariable Long id, @RequestBody DriverDto driverDto) {
         driverService.updateById(id, driverMapper.dtoToEntity(driverDto));
-        return new RestResponse("Driver with ID: " + id + " updated.");
+        return new RestResponse("Driver with ID \"" + id + "\" updated.");
     }
 
     @DeleteMapping("/{id}")
     public RestResponse deleteDriverById(@PathVariable Long id) {
         driverService.deleteById(id);
-        return new RestResponse("Driver with ID: " + id + " deleted");
+        return new RestResponse("Driver with ID \"" + id + "\" deleted");
     }
 }

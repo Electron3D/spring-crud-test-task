@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +31,11 @@ public class CarServiceImpl implements CarService {
     @Transactional
     public void create(Car car) {
         String licensePlate = car.getLicensePlate();
-        carRepository.findByLicensePlate(licensePlate).ifPresent((existedCar) -> {
-            throw new WrongInputException("Car with license plate \"" + licensePlate + "\" already exist.");
-        });
+        carRepository.findByLicensePlate(licensePlate)
+                .orElseThrow(() -> new WrongInputException(
+                        "Car with license plate \""
+                                + licensePlate + "\" already exist."));
+        car.setParkingStarted(LocalDateTime.now());
         carRepository.save(car);
     }
 

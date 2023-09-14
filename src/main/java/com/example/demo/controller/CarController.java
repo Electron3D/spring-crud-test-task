@@ -40,12 +40,12 @@ public class CarController {
     @PutMapping("/{id}")
     public RestResponse updateCarById(@PathVariable Long id, @RequestBody CarDto carDto) {
         carService.updateById(id, carMapper.dtoToEntity(carDto));
-        return new RestResponse("Car with id: " + id + " updated.");
+        return new RestResponse("Car with ID \"" + id + "\" updated.");
     }
 
     @DeleteMapping("/{id}")
     public RestResponse deleteCarById(@PathVariable Long id) {
         carService.deleteById(id);
-        return new RestResponse("Car with id: " + id + " deleted");
+        return new RestResponse("Car with ID \"" + id + "\" deleted");
     }
 }

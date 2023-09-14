@@ -33,11 +33,10 @@ public class DriverMapper extends AbstractMapper<Driver, DriverDto> {
         driver.setDriverLicense(dto.getDriverLicense());
         driver.setBirthday(dto.getBirthday());
         driver.setPhoneNumber(dto.getPhoneNumber());
-        Set<String> carsLicensePlates = dto.getCars();
-        if (carsLicensePlates != null) {
+        Set<String> carsLicensePlates = dto.getCarsLicensePlates();
+        if (carsLicensePlates != null && !carsLicensePlates.isEmpty()) {
             Set<Car> cars = carsLicensePlates.stream()
-                    .map(licensePlate -> carRepository
-                            .findByLicensePlate(licensePlate)
+                    .map(licensePlate -> carRepository.findByLicensePlate(licensePlate)
                             .orElseThrow(() -> new NotFoundException(
                                     "Car with license plate " + licensePlate + " not found.")))
                     .collect(Collectors.toSet());
@@ -47,6 +46,7 @@ public class DriverMapper extends AbstractMapper<Driver, DriverDto> {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DriverDto entityToDto(Driver driver) {
         DriverDto driverDto = new DriverDto();
         driverDto.setFirstName(driver.getFirstName());
@@ -54,11 +54,10 @@ public class DriverMapper extends AbstractMapper<Driver, DriverDto> {
         driverDto.setDriverLicense(driver.getDriverLicense());
         driverDto.setBirthday(driver.getBirthday());
         driverDto.setPhoneNumber(driver.getPhoneNumber());
-
         Set<Car> cars = driver.getCars();
         if (cars != null) {
             driverDto.setParkingDebt(calculateDebt(cars));
-            driverDto.setCars(cars
+            driverDto.setCarsLicensePlates(cars
                     .stream()
                     .map(Car::getLicensePlate)
                     .collect(Collectors.toSet()));
@@ -66,6 +65,7 @@ public class DriverMapper extends AbstractMapper<Driver, DriverDto> {
         return driverDto;
     }
 
+    @Transactional
     public Double calculateDebt(Set<Car> cars) {
         double debt = 0.00;
         for (Car car : cars) {

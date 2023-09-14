@@ -8,10 +8,8 @@ import com.example.demo.data.mapper.AbstractMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,38 +19,22 @@ public class ParkingGarageMapper extends AbstractMapper<ParkingGarage, ParkingGa
     public ParkingGarage dtoToEntity(ParkingGarageDto garageDto) {
         ParkingGarage parkingGarage = new ParkingGarage();
         parkingGarage.setName(garageDto.getName());
-        int capacity = garageDto.getCapacity();
-        parkingGarage.setCapacity(capacity);
-        parkingGarage.setConstructionYear((garageDto.getConstructionYear()));
-        parkingGarage.setParkingRate(Objects.requireNonNullElse(garageDto.getParkingRate(), 0));
-        List<ParkingSlot> parkingSlots = parkingGarage.getParkingSlots();
-        if (parkingSlots == null) {
-            parkingSlots = new ArrayList<>();
-            for (int i = 0; i < capacity; i++) {
-                ParkingSlot parkingSlot = new ParkingSlot();
-                parkingSlot.setSlotNumber(i);
-                parkingSlots.add(parkingSlot);
-            }
-        }
-        if (parkingGarage.getAddress() == null) {
-            Address address = new Address(
-                    garageDto.getCountry(),
-                    garageDto.getState(),
-                    garageDto.getCity(),
-                    garageDto.getStreet(),
-                    garageDto.getBuilding()
-            );
-            parkingGarage.setAddress(address);
-        }
+        parkingGarage.setCapacity(garageDto.getCapacity());
+        parkingGarage.setConstructionDate(garageDto.getConstructionDate());
+        parkingGarage.setParkingRate(garageDto.getParkingRate());
+        Address garageAddress = new Address(garageDto.getCountry(), garageDto.getState(),
+                garageDto.getCity(), garageDto.getStreet(), garageDto.getBuilding());
+        parkingGarage.setAddress(garageAddress);
         return parkingGarage;
     }
 
     @Override
+    @Transactional
     public ParkingGarageDto entityToDto(ParkingGarage garageEntity) {
         ParkingGarageDto garageDto = new ParkingGarageDto();
         garageDto.setName(garageEntity.getName());
         garageDto.setCapacity(garageEntity.getCapacity());
-        garageDto.setConstructionYear(garageEntity.getConstructionYear());
+        garageDto.setConstructionDate(garageEntity.getConstructionDate());
         garageDto.setParkingRate(garageEntity.getParkingRate());
         List<ParkingSlot> parkingSlots = garageEntity.getParkingSlots();
         Map<Integer, Boolean> parkingSlotsMap = parkingSlots

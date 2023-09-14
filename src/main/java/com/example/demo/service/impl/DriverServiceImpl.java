@@ -1,10 +1,9 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.data.dto.DriverDto;
 import com.example.demo.data.entity.Car;
 import com.example.demo.data.entity.Driver;
-import com.example.demo.data.mapper.impl.DriverMapper;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.WrongInputException;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.DriverRepository;
 import com.example.demo.service.DriverService;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class DriverServiceImpl implements DriverService {
@@ -28,9 +26,15 @@ public class DriverServiceImpl implements DriverService {
         this.driverRepository = driverRepository;
         this.carRepository = carRepository;
     }
+
     @Override
     @Transactional
     public void create(Driver driver) {
+        String driverLicense = driver.getDriverLicense();
+        driverRepository.findByDriverLicense(driverLicense)
+                .orElseThrow(() -> new WrongInputException(
+                        "Driver with license \""
+                                + driverLicense + "\" already exist."));
         driverRepository.save(driver);
     }
 
@@ -47,14 +51,19 @@ public class DriverServiceImpl implements DriverService {
         return new ArrayList<>(driverRepository.findAll());
     }
 
-    //redo
     @Override
     @Transactional
     public void updateById(Long id, Driver driver) {
-        Optional<Driver> driverOptional = driverRepository.findById(id);
-        if (driverOptional.isPresent()) {
-            Driver existedDriver = driverOptional.get();
-        } else throw new NotFoundException("Driver with ID \"" + id + "\" not found.");
+        Driver existingDriver = driverRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Driver with ID \"" + id + "\" not found."));
+        existingDriver.setFirstName(driver.getFirstName());
+        existingDriver.setLastName(driver.getLastName());
+        existingDriver.setDriverLicense(driver.getDriverLicense());
+        existingDriver.setBirthday(driver.getBirthday());
+        existingDriver.setPhoneNumber(driver.getPhoneNumber());
+        Set<Car> existingCars = existingDriver.getCars();
+        existingCars.addAll(driver.getCars());
+        driverRepository.save(existingDriver);
     }
 
     @Override

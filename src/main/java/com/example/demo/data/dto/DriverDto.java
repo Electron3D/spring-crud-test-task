@@ -24,5 +24,5 @@ public class DriverDto {
     private Double parkingDebt;
     @NotBlank
     private String phoneNumber;
-    private Set<String> cars;
+    private Set<String> carsLicensePlates;
 }

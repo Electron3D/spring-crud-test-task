@@ -20,7 +20,7 @@ public class ParkingGarage {
     private Long id;
     private String name;
     private Integer capacity;
-    private LocalDate constructionYear;
+    private LocalDate constructionDate;
     private Integer parkingRate;
     @OneToMany(mappedBy = "parkingGarage")
     private List<ParkingSlot> parkingSlots;
