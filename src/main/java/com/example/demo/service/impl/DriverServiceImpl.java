@@ -31,10 +31,9 @@ public class DriverServiceImpl implements DriverService {
     @Transactional
     public void create(Driver driver) {
         String driverLicense = driver.getDriverLicense();
-        driverRepository.findByDriverLicense(driverLicense)
-                .orElseThrow(() -> new WrongInputException(
-                        "Driver with license \""
-                                + driverLicense + "\" already exist."));
+        driverRepository.findByDriverLicense(driverLicense).ifPresent((existedDriver) -> {
+            throw new WrongInputException("Driver with license \"" + driverLicense + "\" already exist.");
+        });
         driverRepository.save(driver);
     }
 

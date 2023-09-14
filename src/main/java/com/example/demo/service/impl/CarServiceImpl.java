@@ -31,10 +31,9 @@ public class CarServiceImpl implements CarService {
     @Transactional
     public void create(Car car) {
         String licensePlate = car.getLicensePlate();
-        carRepository.findByLicensePlate(licensePlate)
-                .orElseThrow(() -> new WrongInputException(
-                        "Car with license plate \""
-                                + licensePlate + "\" already exist."));
+        carRepository.findByLicensePlate(licensePlate).ifPresent((existedCar) -> {
+            throw new WrongInputException("Car with license plate \"" + licensePlate + "\" already exist.");
+        });
         car.setParkingStarted(LocalDateTime.now());
         carRepository.save(car);
     }

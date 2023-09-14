@@ -5,6 +5,7 @@ import com.example.demo.data.entity.ParkingSlot;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.exception.WrongInputException;
 import com.example.demo.repository.ParkingGarageRepository;
+import com.example.demo.repository.ParkingSlotRepository;
 import com.example.demo.service.ParkingGarageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,20 +18,22 @@ import java.util.Optional;
 @Service
 public class ParkingGarageServiceImpl implements ParkingGarageService {
     private final ParkingGarageRepository parkingGarageRepository;
+    private final ParkingSlotRepository parkingSlotRepository;
 
     @Autowired
-    public ParkingGarageServiceImpl(ParkingGarageRepository parkingGarageRepository) {
+    public ParkingGarageServiceImpl(ParkingGarageRepository parkingGarageRepository,
+                                    ParkingSlotRepository parkingSlotRepository) {
         this.parkingGarageRepository = parkingGarageRepository;
+        this.parkingSlotRepository = parkingSlotRepository;
     }
 
     @Override
     @Transactional
     public void create(ParkingGarage parkingGarage) {
         String name = parkingGarage.getName();
-        parkingGarageRepository.findByName(name)
-                .orElseThrow(() -> new WrongInputException(
-                        "Car with license plate \""
-                                + name + "\" already exist."));
+        parkingGarageRepository.findByName(name).ifPresent((existedGarage) -> {
+            throw new WrongInputException("Parking garage \"" + name + "\" already exist.");
+        });
         Integer parkingRate = parkingGarage.getParkingRate();
         if (parkingRate == null || parkingRate < 0) {
             parkingGarage.setParkingRate(0);
@@ -39,6 +42,8 @@ public class ParkingGarageServiceImpl implements ParkingGarageService {
         for (int i = 1; i <= parkingGarage.getCapacity(); i++) {
             ParkingSlot parkingSlot = new ParkingSlot();
             parkingSlot.setSlotNumber(i);
+            parkingSlot.setParkingGarage(parkingGarage);
+            parkingSlotRepository.save(parkingSlot);
             parkingSlots.add(parkingSlot);
         }
         parkingGarage.setParkingSlots(parkingSlots);
