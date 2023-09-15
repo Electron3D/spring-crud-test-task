@@ -5,6 +5,7 @@ import com.example.demo.data.dto.ParkingGarageDto;
 import com.example.demo.data.entity.ParkingGarage;
 import com.example.demo.data.mapper.impl.ParkingGarageMapper;
 import com.example.demo.service.ParkingGarageService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ParkingGarageController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestResponse createParkingGarage(@RequestBody ParkingGarageDto parkingGarageDto) {
+    public RestResponse createParkingGarage(@RequestBody @Valid ParkingGarageDto parkingGarageDto) {
         parkingGarageService.create(parkingGarageMapper.dtoToEntity(parkingGarageDto));
         return new RestResponse("Parking garage created");
     }

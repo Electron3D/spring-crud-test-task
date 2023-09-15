@@ -5,6 +5,7 @@ import com.example.demo.data.dto.DriverDto;
 import com.example.demo.data.entity.Driver;
 import com.example.demo.data.mapper.impl.DriverMapper;
 import com.example.demo.service.DriverService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class DriverController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestResponse createDriver(@RequestBody DriverDto driverDto) {
+    public RestResponse createDriver(@RequestBody @Valid DriverDto driverDto) {
         driverService.create(driverMapper.dtoToEntity(driverDto));
         return new RestResponse("Driver created");
     }

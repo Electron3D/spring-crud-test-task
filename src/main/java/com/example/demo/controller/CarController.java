@@ -5,6 +5,7 @@ import com.example.demo.data.dto.CarDto;
 import com.example.demo.data.entity.Car;
 import com.example.demo.data.mapper.impl.CarMapper;
 import com.example.demo.service.CarService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class CarController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestResponse createCar(@RequestBody CarDto carDto) {
+    public RestResponse createCar(@RequestBody @Valid CarDto carDto) {
         carService.create(carMapper.dtoToEntity(carDto));
         return new RestResponse("Car created");
     }
