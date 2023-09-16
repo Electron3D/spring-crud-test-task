@@ -20,6 +20,7 @@ public class CarDto {
     @NotBlank
     private String licensePlate;
     private LocalDateTime parkingStarted;
+    @NotNull
     @NotBlank
     private String parkingName;
     @NotNull

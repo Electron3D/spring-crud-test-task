@@ -40,23 +40,20 @@ public class CarMapper extends AbstractMapper<Car, CarDto> {
 
         int parkingSlotNumber = carDto.getParkingSlot();
         String parkingGarageName = carDto.getParkingName();
-        if (parkingGarageName!= null && !parkingGarageName.isBlank()) {
-            ParkingGarage garage = parkingGarageRepository.findByName(parkingGarageName)
-                    .orElseThrow(() -> new NotFoundException("Parking garage \"" + parkingGarageName + "\" not found."));
-            List<ParkingSlot> parkingSlots = garage.getParkingSlots();
-            if (parkingSlots.size() >= parkingSlotNumber) {
-                ParkingSlot parkingSlot = parkingSlots.get(parkingSlotNumber - 1);
-                if (parkingSlot.isOccupied()) {
-                    throw new WrongInputException("Parking slot " + parkingSlotNumber + " is already occupied.");
-                }
-                parkingSlot.setOccupied(true);
-                car.setParkingSlot(parkingSlot);
-            } else throw new NotFoundException(
-                    "Parking slot \"" + parkingSlotNumber + "\" in garage \"" + parkingGarageName + "\" not found.");
-        } else throw new NotProvidedException("Please provide parking garage name.");
-
+        ParkingGarage garage = parkingGarageRepository.findByName(parkingGarageName)
+                .orElseThrow(() -> new NotFoundException("Parking garage \"" + parkingGarageName + "\" not found."));
+        List<ParkingSlot> parkingSlots = garage.getParkingSlots();
+        if (parkingSlots.size() >= parkingSlotNumber) {
+            ParkingSlot parkingSlot = parkingSlots.get(parkingSlotNumber - 1);
+            if (parkingSlot.isOccupied()) {
+                throw new WrongInputException("Parking slot " + parkingSlotNumber + " is already occupied.");
+            }
+            parkingSlot.setOccupied(true);
+            car.setParkingSlot(parkingSlot);
+        } else throw new NotFoundException(
+                "Parking slot \"" + parkingSlotNumber + "\" in garage \"" + parkingGarageName + "\" not found.");
         Set<String> driversLicenses = carDto.getDrivers();
-        if (driversLicenses != null && !driversLicenses.isEmpty()) {
+        if (!driversLicenses.isEmpty()) {
             Set<Driver> drivers = driversLicenses.stream()
                     .map(driverLicense -> driverRepository
                             .findByDriverLicense(driverLicense)
