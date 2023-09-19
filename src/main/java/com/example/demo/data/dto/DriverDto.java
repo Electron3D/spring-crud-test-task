@@ -1,6 +1,7 @@
 package com.example.demo.data.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,12 @@ public class DriverDto {
     private String firstName;
     @NotBlank
     private String lastName;
+    @NotNull
     @NotBlank
     private String driverLicense;
     private LocalDate birthday;
     private Double parkingDebt;
+    @NotNull
     @NotBlank
     private String phoneNumber;
     private Set<String> carsLicensePlates;

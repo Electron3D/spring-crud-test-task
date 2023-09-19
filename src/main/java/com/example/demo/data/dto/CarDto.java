@@ -17,6 +17,7 @@ import java.util.Set;
 public class CarDto {
     private String brand;
     private String model;
+    @NotNull
     @NotBlank
     private String licensePlate;
     private LocalDateTime parkingStarted;

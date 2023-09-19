@@ -35,7 +35,7 @@ public class ParkingGarageServiceImpl implements ParkingGarageService {
             throw new WrongInputException("Parking garage \"" + name + "\" already exist.");
         });
         Integer parkingRate = parkingGarage.getParkingRate();
-        if (parkingRate == null || parkingRate < 0) {
+        if (parkingRate == null) {
             parkingGarage.setParkingRate(0);
         }
         List<ParkingSlot> parkingSlots = new ArrayList<>();

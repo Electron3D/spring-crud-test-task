@@ -1,5 +1,6 @@
 package com.example.demo.data.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,11 +16,14 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ParkingGarageDto {
+    @NotNull
     @NotBlank
     private String name;
     @NotNull
+    @Min(1)
     private Integer capacity;
     private LocalDate constructionDate;
+    @Min(0)
     private Integer parkingRate;
     private Map<Integer, Boolean> parkingSlots;
     @NotBlank
