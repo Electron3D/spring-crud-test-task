@@ -3,6 +3,7 @@ package com.example.demo.exception;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,13 +30,16 @@ public class GlobalExceptionHandler {
         String errorMessage = "Resource not found: " + ex.getMessage();
         return buildErrorResponse(HttpStatus.NOT_FOUND, errorMessage);
     }
-    //указать где конкретно констрейнт
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Set<String> errorsSet = new HashSet<>();
         ex.getBindingResult().getAllErrors().forEach((er) -> {
             String errorMessage = er.getDefaultMessage();
-            errorsSet.add(errorMessage);
+            Object[] arguments = er.getArguments();
+            assert arguments != null;
+            DefaultMessageSourceResolvable field = (DefaultMessageSourceResolvable) arguments[0];
+            String fieldMessage = field.getDefaultMessage();
+            errorsSet.add(fieldMessage + ": " + errorMessage);
         });
         return buildErrorArrayResponse(errorsSet.toArray(new String[0]));
     }

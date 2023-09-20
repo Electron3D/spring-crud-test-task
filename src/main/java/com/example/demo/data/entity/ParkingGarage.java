@@ -22,7 +22,7 @@ public class ParkingGarage {
     private Integer capacity;
     private LocalDate constructionDate;
     private Integer parkingRate;
-    @OneToMany(mappedBy = "parkingGarage")
+    @OneToMany(mappedBy = "parkingGarage", cascade = CascadeType.REMOVE)
     private List<ParkingSlot> parkingSlots;
     @Embedded
     private Address address;
