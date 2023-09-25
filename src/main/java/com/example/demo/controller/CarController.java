@@ -28,14 +28,14 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public CarDto getCarById(@PathVariable Long id) {
-        return carMapper.entityToDto(carService.findById(id));
+    public RestResponse getCarById(@PathVariable Long id) {
+        return new RestResponse(carMapper.entityToDto(carService.findById(id)));
     }
 
     @GetMapping
-    public List<CarDto> getAllCars() {
+    public RestResponse getAllCars() {
         List<Car> allCars = carService.findAll();
-        return allCars.stream().map(carMapper::entityToDto).collect(Collectors.toList());
+        return new RestResponse(allCars.stream().map(carMapper::entityToDto).collect(Collectors.toList()));
     }
 
     @PutMapping("/{id}")

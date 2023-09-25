@@ -28,14 +28,14 @@ public class ParkingGarageController {
     }
 
     @GetMapping("/{id}")
-    public ParkingGarageDto getParkingGarageById(@PathVariable Long id) {
-        return parkingGarageMapper.entityToDto(parkingGarageService.findById(id));
+    public RestResponse getParkingGarageById(@PathVariable Long id) {
+        return new RestResponse(parkingGarageMapper.entityToDto(parkingGarageService.findById(id)));
     }
 
     @GetMapping
-    public List<ParkingGarageDto> getAllParkingGarages() {
+    public RestResponse getAllParkingGarages() {
         List<ParkingGarage> allGarages = parkingGarageService.findAll();
-        return allGarages.stream().map(parkingGarageMapper::entityToDto).collect(Collectors.toList());
+        return new RestResponse(allGarages.stream().map(parkingGarageMapper::entityToDto).collect(Collectors.toList()));
     }
 
     @PutMapping("/{id}")

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @RestControllerAdvice
@@ -36,8 +37,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getAllErrors().forEach((er) -> {
             String errorMessage = er.getDefaultMessage();
             Object[] arguments = er.getArguments();
-            assert arguments != null;
-            DefaultMessageSourceResolvable field = (DefaultMessageSourceResolvable) arguments[0];
+            DefaultMessageSourceResolvable field = (DefaultMessageSourceResolvable) Objects.requireNonNull(arguments)[0];
             String fieldMessage = field.getDefaultMessage();
             errorsSet.add(fieldMessage + ": " + errorMessage);
         });

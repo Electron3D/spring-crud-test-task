@@ -28,14 +28,14 @@ public class DriverController {
     }
 
     @GetMapping("/{id}")
-    public DriverDto getDriverById(@PathVariable Long id) {
-        return driverMapper.entityToDto(driverService.findById(id));
+    public RestResponse getDriverById(@PathVariable Long id) {
+        return new RestResponse(driverMapper.entityToDto(driverService.findById(id)));
     }
 
     @GetMapping
-    public List<DriverDto> getAllDrivers() {
+    public RestResponse getAllDrivers() {
         List<Driver> allDrivers = driverService.findAll();
-        return allDrivers.stream().map(driverMapper::entityToDto).collect(Collectors.toList());
+        return new RestResponse(allDrivers.stream().map(driverMapper::entityToDto).collect(Collectors.toList()));
     }
 
     @PutMapping("/{id}")
