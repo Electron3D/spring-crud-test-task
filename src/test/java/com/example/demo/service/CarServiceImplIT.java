@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.data.entity.Car;
+import com.example.demo.data.entity.ParkingSlot;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.exception.WrongInputException;
 import com.example.demo.service.impl.CarServiceImpl;
@@ -14,29 +15,47 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 public class CarServiceImplIT {
+    private final CarServiceImpl carService;
+
     @Autowired
-    private CarServiceImpl carService;
+    public CarServiceImplIT(CarServiceImpl carService) {
+        this.carService = carService;
+    }
 
     @Test
     @Transactional
-    public void should_return_car() {
+    public void should_return_car_IT() {
         Car expectedCar = new Car();
-        expectedCar.setModel("abc");
-        expectedCar.setBrand("123");
+        expectedCar.setModel("200");
+        expectedCar.setBrand("Audi");
         expectedCar.setParkingStarted(LocalDateTime.now());
         expectedCar.setLicensePlate("abc123");
         carService.create(expectedCar);
-
         Car actualCar = carService.findById(1L);
 
         Assertions.assertEquals(expectedCar, actualCar);
     }
     @Test
     @Transactional
-    public void should_return_wrong_input_exception() {
+    public void should_return_updated_car_IT() {
         Car expectedCar = new Car();
-        expectedCar.setModel("abc");
-        expectedCar.setBrand("123");
+        expectedCar.setModel("200");
+        expectedCar.setBrand("Audi");
+        expectedCar.setParkingStarted(LocalDateTime.now());
+        expectedCar.setLicensePlate("abc123");
+        carService.create(expectedCar);
+        expectedCar.setBrand("Toyota");
+        carService.updateById(1L, expectedCar);
+        Car actualCar = carService.findById(1L);
+
+        Assertions.assertEquals(expectedCar, actualCar);
+    }
+    @Test
+    @Transactional
+    public void should_return_wrong_input_exception_IT() {
+        Car expectedCar = new Car();
+        expectedCar.setModel("200");
+        expectedCar.setBrand("Audi");
         expectedCar.setParkingStarted(LocalDateTime.now());
         expectedCar.setLicensePlate("abc123");
         carService.create(expectedCar);
@@ -48,7 +67,19 @@ public class CarServiceImplIT {
     }
     @Test
     @Transactional
-    public void should_return_not_found_exception() {
+    public void should_return_not_found_exception_IT() {
+        Car expectedCar = new Car();
+        expectedCar.setModel("200");
+        expectedCar.setBrand("Audi");
+        expectedCar.setParkingStarted(LocalDateTime.now());
+        expectedCar.setLicensePlate("abc123");
+        ParkingSlot slot = new ParkingSlot();
+        slot.setCar(expectedCar);
+        slot.setOccupied(true);
+        expectedCar.setParkingSlot(slot);
+        carService.create(expectedCar);
+        carService.deleteById(1L);
+
         NotFoundException notFoundException = Assertions.assertThrows(NotFoundException.class, () -> carService.findById(1L));
         String expectedMessage = "Car with ID \"1\" not found.";
         String actualMessage = notFoundException.getMessage();
