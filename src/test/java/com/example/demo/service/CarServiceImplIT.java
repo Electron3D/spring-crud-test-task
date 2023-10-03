@@ -8,7 +8,6 @@ import com.example.demo.exception.WrongInputException;
 import com.example.demo.service.impl.CarServiceImpl;
 import com.example.demo.service.impl.ParkingGarageServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-@Sql({"/initDb.sql"})
+@Sql({"/createTablesInDb.sql", "/insertGarageInDb.sql"})
 public class CarServiceImplIT {
     private final CarServiceImpl carService;
     private final ParkingGarageServiceImpl parkingGarageService;
