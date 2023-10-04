@@ -47,6 +47,6 @@ public class CarController {
     @DeleteMapping("/{id}")
     public RestResponse deleteCarById(@PathVariable Long id) {
         carService.deleteById(id);
-        return new RestResponse("Car with ID \"" + id + "\" deleted");
+        return new RestResponse("Car with ID \"" + id + "\" deleted.");
     }
 }

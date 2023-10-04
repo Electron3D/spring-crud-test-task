@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-@Sql({"/createTablesInDb.sql", "/insertGarageInDb.sql"})
+@Sql({"/createTablesInDb.sql", "/insertGarageIntoDb.sql"})
 public class CarServiceImplIT {
     private final CarServiceImpl carService;
     private final ParkingGarageServiceImpl parkingGarageService;
