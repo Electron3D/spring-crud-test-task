@@ -14,7 +14,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql({"/createTablesInDb.sql", "/insertCarIntoDb.sql", "/insertDriverIntoDb.sql", "/insertGarageIntoDb.sql"})
