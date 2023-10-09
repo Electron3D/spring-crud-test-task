@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: prod
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog.sql
+server:
+  error:
+    include-message: always
+    include-stacktrace: never
 
 ---
 
@@ -9,7 +16,7 @@ spring:
       activate:
           on-profile: prod
   datasource:
-    url: jdbc:mysql://localhost:3306/parkingDb
+    url: jdbc:mysql://localhost:3306/parking_db
     username: user
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,12 +30,8 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
-  server:
-    port: 8082
-    error:
-      include-message: always
-      include-stacktrace: never
-
+server:
+  port: 8082
 ---
 
 spring:
@@ -51,10 +54,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: true
-  server:
-    port: 8083
-    error:
-      include-message: always
-      include-stacktrace: never
+server:
+  port: 8083

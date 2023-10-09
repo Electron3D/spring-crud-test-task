@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql({"/createTablesInDb.sql", "/insertCarIntoDb.sql", "/insertDriverIntoDb.sql", "/insertGarageIntoDb.sql"})
+@Sql({"/createTablesInDb.sql", "/insertGarageIntoDb.sql", "/insertDriverIntoDb.sql", "/insertCarIntoDb.sql"})
 @ActiveProfiles("test")
 public class CarControllerIT {
     private final TestRestTemplate testRestTemplate;
