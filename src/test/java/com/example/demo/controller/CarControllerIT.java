@@ -10,6 +10,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql({"/createTablesInDb.sql", "/insertCarIntoDb.sql", "/insertDriverIntoDb.sql", "/insertGarageIntoDb.sql"})
+@ActiveProfiles("test")
 public class CarControllerIT {
     private final TestRestTemplate testRestTemplate;
 
